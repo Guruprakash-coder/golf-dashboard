@@ -3,6 +3,14 @@
 -- Copy and paste this script directly into your Supabase SQL Editor.
 -- ==========================================================================
 
+-- Disable Row Level Security (RLS) for testing and evaluation ease
+ALTER TABLE IF EXISTS public.charities DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.profiles DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.scores DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.draws DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.winners DISABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.donations DISABLE ROW LEVEL SECURITY;
+
 -- 1. Charities Table
 CREATE TABLE IF NOT EXISTS public.charities (
     id TEXT PRIMARY KEY,

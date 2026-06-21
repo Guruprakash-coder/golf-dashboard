@@ -588,3 +588,66 @@ export const db = {
     return donation;
   }
 };
+
+// ==========================================
+// AUTO-BOOTSTRAP/SEED LIVE DATABASE
+// ==========================================
+const bootstrapDatabase = async () => {
+  if (!supabase) return;
+  try {
+    // 1. Check charities
+    const { data: charities, error: cErr } = await supabase.from('charities').select('id');
+    if (cErr) {
+      console.warn('Auto-seed check: tables might not exist yet in Supabase SQL editor.');
+      return;
+    }
+    
+    if (charities.length === 0) {
+      console.log('Live Supabase table charities is empty. Bootstrapping seed charities...');
+      for (const charity of seedCharities) {
+        await supabase.from('charities').insert({
+          id: charity.id,
+          name: charity.name,
+          description: charity.description,
+          image_url: charity.imageUrl,
+          events: charity.events,
+          is_featured: charity.isFeatured,
+          total_donations: charity.totalDonations
+        });
+      }
+      console.log('Seeded charities successfully.');
+    }
+    
+    // 2. Check profiles
+    const { data: profiles } = await supabase.from('profiles').select('id');
+    if (profiles && profiles.length === 0) {
+      console.log('Live Supabase table profiles is empty. Bootstrapping test users...');
+      for (const u of seedUsers) {
+        await supabase.from('profiles').insert(u);
+      }
+      console.log('Seeded test users successfully.');
+    }
+
+    // 3. Check scores
+    const { data: scores } = await supabase.from('scores').select('id');
+    if (scores && scores.length === 0) {
+      console.log('Live Supabase table scores is empty. Bootstrapping test scores...');
+      for (const s of seedScores) {
+        await supabase.from('scores').insert({
+          id: s.id,
+          user_id: s.userId,
+          score: s.score,
+          date: s.date
+        });
+      }
+      console.log('Seeded test scores successfully.');
+    }
+  } catch (err) {
+    console.error('Auto-bootstrap process encountered an error:', err.message);
+  }
+};
+
+if (isSupabaseConfigured) {
+  bootstrapDatabase();
+}
+
