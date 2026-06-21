@@ -105,7 +105,7 @@ ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.profiles (id, email, "passwordHash", "fullName", role, "subscriptionStatus", "subscriptionTier", "subscriptionRenewal", "charityId", "charityPercentage", "walletBalance", "createdAt")
 VALUES 
-('user-admin', 'admin@digitalheroes.co.in', '$2a$08$dK1m7P7eQ2eX.f.4v.z6fevWJ8tJ8G8L2dJ2dJ2dJ2dJ2dJ2dJ2d.', 'David Sterling', 'admin', 'active', 'yearly', '2027-03-15', 'charity-1', 15, 0.00, '2026-01-10'),
-('user-sub1', 'golfguy@digitalheroes.co.in', '$2a$08$dK1m7P7eQ2eX.f.4v.z6fevWJ8tJ8G8L2dJ2dJ2dJ2dJ2dJ2dJ2d.', 'Marcus Vance', 'subscriber', 'active', 'monthly', '2026-07-15', 'charity-1', 20, 250.00, '2026-03-01'),
-('user-sub2', 'sarah.jones@gmail.com', '$2a$08$dK1m7P7eQ2eX.f.4v.z6fevWJ8tJ8G8L2dJ2dJ2dJ2dJ2dJ2dJ2d.', 'Sarah Jones', 'subscriber', 'active', 'yearly', '2027-02-18', 'charity-3', 10, 0.00, '2026-02-18')
+('user-admin', 'admin@digitalheroes.co.in', '$2a$08$fYUtQSVSFkej687xkq2yeeKNnN4qmIPszP.vzaIjjcC1WlfT8lFDW', 'David Sterling', 'admin', 'active', 'yearly', '2027-03-15', 'charity-1', 15, 0.00, '2026-01-10'),
+('user-sub1', 'golfguy@digitalheroes.co.in', '$2a$08$AZ2nIBBCFMDdHJCdadb.we9PQzNTTw5b6mYDQbLZqWY6j7ypiKWW2', 'Marcus Vance', 'subscriber', 'active', 'monthly', '2026-07-15', 'charity-1', 20, 250.00, '2026-03-01'),
+('user-sub2', 'sarah.jones@gmail.com', '$2a$08$/N2PYXCrhbFkZh7/VJKdbuIkL1SoKTwHtyNZnSf6ghf9KtVaUVbyW', 'Sarah Jones', 'subscriber', 'active', 'yearly', '2027-02-18', 'charity-3', 10, 0.00, '2026-02-18')
 ON CONFLICT (id) DO NOTHING;
