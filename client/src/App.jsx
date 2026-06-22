@@ -9,7 +9,7 @@ import Auth from './views/Auth';
 
 import { X, CreditCard } from 'lucide-react';
 
-const API_BASE = ''; // Relies on Vite proxy configurations
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function App() {
   // Authentication & session state
