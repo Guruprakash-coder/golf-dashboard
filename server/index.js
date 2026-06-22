@@ -16,7 +16,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigin = process.env.CLIENT_URL || '*';
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // ==========================================
