@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Upload, AlertCircle, RefreshCw, X } from 'lucide-react';
 
-const API_BASE = '';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Dashboard({ 
   currentUser, 

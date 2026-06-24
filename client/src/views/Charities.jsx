@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Heart, Calendar, X, CreditCard } from 'lucide-react';
 
-const API_BASE = '';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Charities({ charities, token, triggerError, triggerSuccess, fetchCharities }) {
   const [searchTerm, setSearchTerm] = useState('');

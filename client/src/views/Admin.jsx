@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Users, Trophy, Award, Plus, Edit2, Trash2, Check, X, ShieldAlert } from 'lucide-react';
 
-const API_BASE = '';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export default function Admin({ token, triggerError, triggerSuccess, charities, fetchCharities, fetchDrawHistory }) {
   const [activeAdminTab, setActiveAdminTab] = useState('draws');
