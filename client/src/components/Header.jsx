@@ -5,8 +5,7 @@ export default function Header({
   activeTab, 
   currentUser, 
   onLogout, 
-  onSignInClick, 
-  devQuickSwitch 
+  onSignInClick
 }) {
   
   // Format page titles dynamically
@@ -26,29 +25,6 @@ export default function Header({
       {/* Page Title display */}
       <div className="header-left">
         <h1 className="header-page-title">{getPageTitle()}</h1>
-      </div>
-
-      {/* Role Switcher Evaluation Helper */}
-      <div className="evaluation-switchbar">
-        <span className="switchbar-lbl">🔬 Trainee Switcher:</span>
-        <button 
-          className={`switchbar-btn ${currentUser?.role === 'admin' ? 'active' : ''}`}
-          onClick={() => devQuickSwitch('admin')}
-        >
-          Admin
-        </button>
-        <button 
-          className={`switchbar-btn ${currentUser?.role === 'subscriber' && currentUser?.subscriptionStatus === 'active' ? 'active' : ''}`}
-          onClick={() => devQuickSwitch('subscriber_active')}
-        >
-          Active Sub
-        </button>
-        <button 
-          className={`switchbar-btn ${currentUser?.role === 'subscriber' && currentUser?.subscriptionStatus === 'inactive' ? 'active' : ''}`}
-          onClick={() => devQuickSwitch('subscriber_inactive')}
-        >
-          Inactive Sub
-        </button>
       </div>
 
       {/* Auth action section */}

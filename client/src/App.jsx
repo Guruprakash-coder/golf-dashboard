@@ -165,42 +165,7 @@ export default function App() {
     triggerSuccess("Logged out successfully.");
   };
 
-  // Trainee switchbar override (Bypasses verification workflow immediately for grading)
-  const devQuickSwitch = async (roleType) => {
-    let email = 'admin@digitalheroes.co.in';
-    let password = 'admin123';
-    
-    if (roleType === 'subscriber_active') {
-      email = 'golfguy@digitalheroes.co.in';
-      password = 'user123';
-    } else if (roleType === 'subscriber_inactive') {
-      email = 'tom.watson@yahoo.com';
-      password = 'user123';
-    }
-    
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('dh_token', data.token);
-        setToken(data.token);
-        setCurrentUser(data.user);
-        triggerSuccess(`Role switched to: ${data.user.fullName} (${data.user.role})`);
-        
-        if (data.user.role === 'admin') {
-          setActiveTab('admin');
-        } else {
-          setActiveTab('dashboard');
-        }
-      }
-    } catch (err) {
-      triggerError("Check that local server is running on port 5000.");
-    }
-  };
+
 
   const handleSubscriptionCheckout = async (tier) => {
     setIsCheckoutProcessing(true);
@@ -265,7 +230,6 @@ export default function App() {
           currentUser={currentUser} 
           onLogout={handleLogout} 
           onSignInClick={() => setActiveTab('auth')} 
-          devQuickSwitch={devQuickSwitch} 
         />
 
         {/* Global messages banner */}
