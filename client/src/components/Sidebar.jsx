@@ -52,6 +52,13 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser }) {
               <Heart size={16} />
               <span>Charity Directory</span>
             </li>
+            <li 
+              className={`nav-item ${activeTab === 'pricing' ? 'active' : ''}`}
+              onClick={() => setActiveTab('pricing')}
+            >
+              <Award size={16} />
+              <span>Membership Plans</span>
+            </li>
           </ul>
         </div>
 

@@ -6,6 +6,7 @@ import Charities from './views/Charities';
 import Dashboard from './views/Dashboard';
 import Admin from './views/Admin';
 import Auth from './views/Auth';
+import Pricing from './views/Pricing';
 
 import { X, CreditCard } from 'lucide-react';
 
@@ -167,7 +168,7 @@ export default function App() {
 
 
 
-  const handleSubscriptionCheckout = async (tier) => {
+  const handleSubscriptionCheckout = async (tier, customDetails = {}) => {
     setIsCheckoutProcessing(true);
     try {
       const res = await fetch(`${API_BASE}/api/subscription/checkout`, {
@@ -176,15 +177,16 @@ export default function App() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ tier })
+        body: JSON.stringify({ tier, ...customDetails })
       });
       const data = await res.json();
       if (res.ok) {
         setCurrentUser(data.user);
         setShowCheckout(false);
         setActiveTab('dashboard');
-        triggerSuccess(`Subscribed to the ${tier} plan successfully!`);
+        triggerSuccess(data.message || `Subscribed to the ${tier} plan successfully!`);
         fetchPoolStats();
+        fetchCharities();
       } else {
         triggerError(data.error || "Subscription upgrade failed.");
       }
@@ -270,6 +272,18 @@ export default function App() {
               triggerError={triggerError} 
               triggerSuccess={triggerSuccess} 
               fetchCharities={fetchCharities} 
+            />
+          )}
+
+          {activeTab === 'pricing' && (
+            <Pricing 
+              currentUser={currentUser}
+              token={token}
+              charities={charities}
+              triggerSuccess={triggerSuccess}
+              triggerError={triggerError}
+              handleSubscriptionCheckout={handleSubscriptionCheckout}
+              onSignInClick={() => setActiveTab('auth')}
             />
           )}
 

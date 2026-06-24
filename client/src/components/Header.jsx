@@ -13,6 +13,7 @@ export default function Header({
     switch(activeTab) {
       case 'home': return 'Platform Concept';
       case 'charities': return 'Charity Directory';
+      case 'pricing': return 'Membership Plans & Calculator';
       case 'dashboard': return 'Subscriber Dashboard';
       case 'admin': return 'Administrator Control Room';
       case 'auth': return 'Authentication';
