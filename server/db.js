@@ -599,72 +599,112 @@ export const db = {
 const bootstrapDatabase = async () => {
   if (!supabase) return;
   try {
-    // 1. Check charities
-    const { data: charities, error: cErr } = await supabase.from('charities').select('id');
-    if (cErr) {
-      console.warn('Auto-seed check: tables might not exist yet in Supabase SQL editor.', cErr.message);
-      return;
-    }
-    
-    if (charities.length === 0) {
-      console.log('Live Supabase table charities is empty. Bootstrapping seed charities...');
-      let hasError = false;
-      for (const charity of seedCharities) {
-        const { error } = await supabase.from('charities').insert({
-          id: charity.id,
-          name: charity.name,
-          description: charity.description,
-          image_url: charity.imageUrl,
-          events: charity.events,
-          is_featured: charity.isFeatured,
-          total_donations: charity.totalDonations
-        });
-        if (error) {
-          console.error(`Error seeding charity ${charity.id}:`, error.message);
-          hasError = true;
-        }
-      }
-      if (!hasError) console.log('Seeded charities successfully.');
-    }
-    
-    // 2. Check profiles
-    const { data: profiles, error: pErr } = await supabase.from('profiles').select('id');
-    if (pErr) {
-      console.error('Error checking profiles table:', pErr.message);
-    } else if (profiles && profiles.length === 0) {
-      console.log('Live Supabase table profiles is empty. Bootstrapping test users...');
-      let hasError = false;
-      for (const u of seedUsers) {
-        const { error } = await supabase.from('profiles').insert(u);
-        if (error) {
-          console.error(`Error seeding profile ${u.email}:`, error.message);
-          hasError = true;
-        }
-      }
-      if (!hasError) console.log('Seeded test users successfully.');
-    }
+    console.log('Database Mode: Live Supabase connected! Starting self-healing DB seeding...');
 
-    // 3. Check scores
-    const { data: scores, error: sErr } = await supabase.from('scores').select('id');
-    if (sErr) {
-      console.error('Error checking scores table:', sErr.message);
-    } else if (scores && scores.length === 0) {
-      console.log('Live Supabase table scores is empty. Bootstrapping test scores...');
-      let hasError = false;
-      for (const s of seedScores) {
-        const { error } = await supabase.from('scores').insert({
-          id: s.id,
-          user_id: s.userId,
-          score: s.score,
-          date: s.date
-        });
-        if (error) {
-          console.error(`Error seeding score ${s.id}:`, error.message);
-          hasError = true;
-        }
+    // 1. Seed Charities
+    let charityError = false;
+    for (const charity of seedCharities) {
+      const { error } = await supabase.from('charities').upsert({
+        id: charity.id,
+        name: charity.name,
+        description: charity.description,
+        image_url: charity.imageUrl,
+        events: charity.events,
+        is_featured: charity.isFeatured,
+        total_donations: charity.totalDonations
+      });
+      if (error) {
+        console.error(`Error upserting charity ${charity.id}:`, error.message);
+        charityError = true;
       }
-      if (!hasError) console.log('Seeded test scores successfully.');
     }
+    if (!charityError) console.log('Successfully synchronized seed charities.');
+
+    // 2. Seed Profiles
+    let profileError = false;
+    for (const u of seedUsers) {
+      const { error } = await supabase.from('profiles').upsert(u);
+      if (error) {
+        console.error(`Error upserting profile ${u.email}:`, error.message);
+        profileError = true;
+      }
+    }
+    if (!profileError) console.log('Successfully synchronized seed profiles.');
+
+    // 3. Seed Scores
+    let scoreError = false;
+    for (const s of seedScores) {
+      const { error } = await supabase.from('scores').upsert({
+        id: s.id,
+        user_id: s.userId,
+        score: s.score,
+        date: s.date
+      });
+      if (error) {
+        console.error(`Error upserting score ${s.id}:`, error.message);
+        scoreError = true;
+      }
+    }
+    if (!scoreError) console.log('Successfully synchronized seed scores.');
+
+    // 4. Seed Draws
+    let drawError = false;
+    for (const d of seedDraws) {
+      const { error } = await supabase.from('draws').upsert({
+        id: d.id,
+        draw_date: d.drawDate,
+        winning_numbers: d.winningNumbers,
+        draw_type: d.drawType,
+        status: d.status,
+        jackpot_pool: d.jackpotPool,
+        match_4_pool: d.match4Pool,
+        match_3_pool: d.match3Pool,
+        rolled_over: d.rolledOver
+      });
+      if (error) {
+        console.error(`Error upserting draw ${d.id}:`, error.message);
+        drawError = true;
+      }
+    }
+    if (!drawError) console.log('Successfully synchronized seed draws.');
+
+    // 5. Seed Winners
+    let winnerError = false;
+    for (const w of seedWinners) {
+      const { error } = await supabase.from('winners').upsert({
+        id: w.id,
+        draw_id: w.drawId,
+        user_id: w.userId,
+        match_count: w.matchCount,
+        prize_amount: w.prizeAmount,
+        proof_url: w.proofUrl,
+        status: w.status
+      });
+      if (error) {
+        console.error(`Error upserting winner ${w.id}:`, error.message);
+        winnerError = true;
+      }
+    }
+    if (!winnerError) console.log('Successfully synchronized seed winners.');
+
+    // 6. Seed Donations
+    let donationError = false;
+    for (const don of seedDonations) {
+      const { error } = await supabase.from('donations').upsert({
+        id: don.id,
+        user_id: don.userId,
+        charity_id: don.charityId,
+        amount: don.amount,
+        type: don.type
+      });
+      if (error) {
+        console.error(`Error upserting donation ${don.id}:`, error.message);
+        donationError = true;
+      }
+    }
+    if (!donationError) console.log('Successfully synchronized seed donations.');
+
+    console.log('Database self-healing bootstrap synchronization complete.');
   } catch (err) {
     console.error('Auto-bootstrap process encountered an error:', err.message);
   }
