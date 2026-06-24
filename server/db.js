@@ -9,13 +9,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 
+                    process.env.SERVICE_ROLE_KEY ||
+                    process.env.SUPABASE_ANON_KEY || 
+                    process.env.VITE_SUPABASE_ANON_KEY || 
+                    process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const isSupabaseConfigured = supabaseUrl && supabaseAnonKey && 
+const isSupabaseConfigured = supabaseUrl && supabaseKey && 
   supabaseUrl !== 'your_supabase_url_here' && 
-  supabaseAnonKey !== 'your_supabase_anon_key_here';
+  supabaseKey !== 'your_supabase_anon_key_here';
 
-export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseKey) : null;
 
 if (isSupabaseConfigured) {
   console.log('Database Mode: Live Supabase connected!');
@@ -598,14 +602,15 @@ const bootstrapDatabase = async () => {
     // 1. Check charities
     const { data: charities, error: cErr } = await supabase.from('charities').select('id');
     if (cErr) {
-      console.warn('Auto-seed check: tables might not exist yet in Supabase SQL editor.');
+      console.warn('Auto-seed check: tables might not exist yet in Supabase SQL editor.', cErr.message);
       return;
     }
     
     if (charities.length === 0) {
       console.log('Live Supabase table charities is empty. Bootstrapping seed charities...');
+      let hasError = false;
       for (const charity of seedCharities) {
-        await supabase.from('charities').insert({
+        const { error } = await supabase.from('charities').insert({
           id: charity.id,
           name: charity.name,
           description: charity.description,
@@ -614,33 +619,51 @@ const bootstrapDatabase = async () => {
           is_featured: charity.isFeatured,
           total_donations: charity.totalDonations
         });
+        if (error) {
+          console.error(`Error seeding charity ${charity.id}:`, error.message);
+          hasError = true;
+        }
       }
-      console.log('Seeded charities successfully.');
+      if (!hasError) console.log('Seeded charities successfully.');
     }
     
     // 2. Check profiles
-    const { data: profiles } = await supabase.from('profiles').select('id');
-    if (profiles && profiles.length === 0) {
+    const { data: profiles, error: pErr } = await supabase.from('profiles').select('id');
+    if (pErr) {
+      console.error('Error checking profiles table:', pErr.message);
+    } else if (profiles && profiles.length === 0) {
       console.log('Live Supabase table profiles is empty. Bootstrapping test users...');
+      let hasError = false;
       for (const u of seedUsers) {
-        await supabase.from('profiles').insert(u);
+        const { error } = await supabase.from('profiles').insert(u);
+        if (error) {
+          console.error(`Error seeding profile ${u.email}:`, error.message);
+          hasError = true;
+        }
       }
-      console.log('Seeded test users successfully.');
+      if (!hasError) console.log('Seeded test users successfully.');
     }
 
     // 3. Check scores
-    const { data: scores } = await supabase.from('scores').select('id');
-    if (scores && scores.length === 0) {
+    const { data: scores, error: sErr } = await supabase.from('scores').select('id');
+    if (sErr) {
+      console.error('Error checking scores table:', sErr.message);
+    } else if (scores && scores.length === 0) {
       console.log('Live Supabase table scores is empty. Bootstrapping test scores...');
+      let hasError = false;
       for (const s of seedScores) {
-        await supabase.from('scores').insert({
+        const { error } = await supabase.from('scores').insert({
           id: s.id,
           user_id: s.userId,
           score: s.score,
           date: s.date
         });
+        if (error) {
+          console.error(`Error seeding score ${s.id}:`, error.message);
+          hasError = true;
+        }
       }
-      console.log('Seeded test scores successfully.');
+      if (!hasError) console.log('Seeded test scores successfully.');
     }
   } catch (err) {
     console.error('Auto-bootstrap process encountered an error:', err.message);
