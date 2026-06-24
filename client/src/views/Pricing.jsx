@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Award, HelpCircle, Check, Sparkles, ShieldCheck } from 'lucide-react';
+import { CreditCard, Award, HelpCircle, Check, Sparkles, ShieldCheck, X } from 'lucide-react';
 
 export default function Pricing({ currentUser, token, charities, triggerSuccess, triggerError, handleSubscriptionCheckout, onSignInClick }) {
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly', 'quarterly', 'yearly'
