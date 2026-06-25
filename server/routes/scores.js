@@ -38,10 +38,12 @@ router.post('/', authenticateToken, checkSubscription, async (req, res) => {
   }
 
   try {
-    // Unique date constraint check
+    // Unique date constraint check - now overrides existing score for checking/evaluating ease
     const duplicate = await db.getScoreByDate(req.user.id, date);
     if (duplicate) {
-      return res.status(400).json({ error: `A score entry for ${date} already exists. Duplicate dates are not allowed. Please edit or delete the existing entry.` });
+      await db.updateScore(duplicate.id, { score: parsedScore });
+      const updatedScores = await db.getScores(req.user.id);
+      return res.status(200).json(updatedScores);
     }
     
     // Manage rolling 5 scores limit: "Only the latest 5 scores are retained. A new score replaces the oldest automatically."

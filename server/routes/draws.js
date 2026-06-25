@@ -195,10 +195,18 @@ router.post('/publish', authenticateToken, verifyAdmin, async (req, res) => {
   }
   
   try {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const existingDraws = await db.getDraws();
+    const todayDraw = existingDraws.find(d => d.drawDate === todayStr);
+    if (todayDraw) {
+      // Clean up previous draw on same date to override it
+      await db.deleteDraw(todayDraw.id);
+    }
+
     const newDrawId = `draw-${Date.now()}`;
     const newDrawRecord = {
       id: newDrawId,
-      drawDate: new Date().toISOString().split('T')[0],
+      drawDate: todayStr,
       winningNumbers,
       drawType: drawType || 'random',
       status: 'published',

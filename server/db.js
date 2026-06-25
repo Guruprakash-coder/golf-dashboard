@@ -487,6 +487,17 @@ export const db = {
     return draw;
   },
 
+  async deleteDraw(id) {
+    if (supabase) {
+      const { error } = await supabase.from('draws').delete().eq('id', id);
+      if (error) throw error;
+      return true;
+    }
+    inMemoryDb.draws = inMemoryDb.draws.filter(d => d.id !== id);
+    inMemoryDb.winners = inMemoryDb.winners.filter(w => w.drawId !== id);
+    return true;
+  },
+
   async getJackpotRollover() {
     if (supabase) {
       // Find latest rollover jackpot pool from settings or draws
