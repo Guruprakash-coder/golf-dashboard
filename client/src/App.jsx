@@ -17,6 +17,12 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('dh_token') || null);
   const [activeTab, setActiveTab] = useState('home'); // 'home', 'charities', 'dashboard', 'admin', 'auth'
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setIsSidebarOpen(false);
+  };
   
   // Alert messages state
   const [errorMessage, setErrorMessage] = useState('');
@@ -218,11 +224,18 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Backdrop overlay for mobile sidebar */}
+      {isSidebarOpen && (
+        <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
+      )}
+
       {/* Sidebar navigation panel */}
       <Sidebar 
         activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+        setActiveTab={handleTabChange} 
         currentUser={currentUser} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
       {/* Main viewport */}
@@ -231,7 +244,8 @@ export default function App() {
           activeTab={activeTab} 
           currentUser={currentUser} 
           onLogout={handleLogout} 
-          onSignInClick={() => setActiveTab('auth')} 
+          onSignInClick={() => handleTabChange('auth')} 
+          onMenuToggle={() => setIsSidebarOpen(true)}
         />
 
         {/* Global messages banner */}
@@ -283,7 +297,7 @@ export default function App() {
               triggerSuccess={triggerSuccess}
               triggerError={triggerError}
               handleSubscriptionCheckout={handleSubscriptionCheckout}
-              onSignInClick={() => setActiveTab('auth')}
+              onSignInClick={() => handleTabChange('auth')}
             />
           )}
 
@@ -345,7 +359,7 @@ export default function App() {
       {/* Subscription Upgrading Modal */}
       {showCheckout && (
         <div className="modal-overlay">
-          <div className="modal-container atlas-modal" style={{ width: '540px' }}>
+          <div className="modal-container atlas-modal checkout-modal">
             <button className="modal-close" onClick={() => setShowCheckout(false)}><X size={20} /></button>
             <div className="modal-body">
               <h3 style={{ textAlign: 'center', marginBottom: '8px' }}>Select Membership Plan</h3>
@@ -353,7 +367,7 @@ export default function App() {
                 Upgrading unlocks your rolling score tracking board and enters you in monthly payouts.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              <div className="checkout-plans-grid">
                 <div 
                   className="atlas-card" 
                   onClick={() => setSelectedPlan('monthly')}

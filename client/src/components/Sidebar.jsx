@@ -1,17 +1,17 @@
 import React from 'react';
 import { 
   Trophy, Home, Heart, Activity, Settings, 
-  Users, Award, FolderHeart, HelpCircle, ChevronRight, ChevronsUpDown
+  Users, Award, FolderHeart, HelpCircle, ChevronRight, ChevronsUpDown, X
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, currentUser }) {
+export default function Sidebar({ activeTab, setActiveTab, currentUser, isOpen, onClose }) {
   const isAdmin = currentUser?.role === 'admin';
   const isActiveSubscriber = currentUser?.subscriptionStatus === 'active';
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       {/* Sidebar Top: Logo / App Name */}
-      <div className="sidebar-brand-wrapper">
+      <div className="sidebar-brand-wrapper" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="sidebar-brand">
           <div className="logo-icon-box">
             <Trophy size={18} />
@@ -21,6 +21,9 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser }) {
             <span className="brand-badge">March 2026 PRD</span>
           </div>
         </div>
+        <button className="sidebar-close-btn" onClick={onClose} aria-label="Close Sidebar">
+          <X size={18} />
+        </button>
       </div>
 
       {/* Project selector (Atlas style - static info) */}

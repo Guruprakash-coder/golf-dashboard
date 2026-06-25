@@ -191,7 +191,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
     <div className="view-container">
       {/* Top metrics dashboard block */}
       {reports && (
-        <div className="atlas-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '30px' }}>
+        <div className="atlas-metrics-grid">
           <div className="metric-box">
             <span className="lbl">PLATFORM MEMBERS</span>
             <div className="val">{reports.summary.totalUsers}</div>
@@ -221,7 +221,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
 
       {/* View Content details */}
       {activeAdminTab === 'draws' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '30px' }}>
+        <div className="admin-draws-grid">
           <div className="atlas-card">
             <h3 className="card-sub-title">Drawing Controls</h3>
             <div className="form-group">
@@ -429,7 +429,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
       )}
 
       {activeAdminTab === 'charities' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '30px' }}>
+        <div className="admin-charities-grid">
           <div className="atlas-card">
             <h3>{editingCharityId ? 'Modify Charity' : 'Register New Charity'}</h3>
             <form onSubmit={handleCharitySubmit} style={{ marginTop: '16px' }}>

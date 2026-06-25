@@ -1,11 +1,12 @@
 import React from 'react';
-import { User, LogOut, ChevronDown } from 'lucide-react';
+import { User, LogOut, ChevronDown, Menu } from 'lucide-react';
 
 export default function Header({ 
   activeTab, 
   currentUser, 
   onLogout, 
-  onSignInClick
+  onSignInClick,
+  onMenuToggle
 }) {
   
   // Format page titles dynamically
@@ -24,7 +25,10 @@ export default function Header({
   return (
     <header className="main-header">
       {/* Page Title display */}
-      <div className="header-left">
+      <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <button className="mobile-menu-toggle" onClick={onMenuToggle} aria-label="Toggle Menu">
+          <Menu size={20} />
+        </button>
         <h1 className="header-page-title">{getPageTitle()}</h1>
       </div>
 

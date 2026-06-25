@@ -100,7 +100,7 @@ export default function Pricing({ currentUser, token, charities, triggerSuccess,
       </div>
 
       {/* Grid of Tiers */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '40px' }}>
+      <div className="pricing-plans-grid">
         
         {/* Tier 1: Free account */}
         <div className="atlas-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderColor: 'var(--border-color)' }}>
@@ -135,7 +135,7 @@ export default function Pricing({ currentUser, token, charities, triggerSuccess,
         </div>
 
         {/* Tier 2: Interactive / Custom Hero Tier (Spotlight) */}
-        <div className="atlas-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderColor: 'var(--brand-forest)', borderWidth: '2px', position: 'relative', transform: 'scale(1.02)' }}>
+        <div className="atlas-card popular-plan-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderColor: 'var(--brand-forest)', borderWidth: '2px', position: 'relative' }}>
           <div className="status-badge status-active" style={{ position: 'absolute', top: '-12px', right: '20px', backgroundColor: 'var(--brand-forest)', color: '#ffffff' }}>POPULAR / CUSTOMIZABLE</div>
           <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
             <h4 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -217,7 +217,7 @@ export default function Pricing({ currentUser, token, charities, triggerSuccess,
           Select your billing cycle, designate a custom charity addition, and slide the charity allocation percentage to see where your money goes.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px' }}>
+        <div className="pricing-calculator-grid">
           
           {/* Controls Column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -365,7 +365,7 @@ export default function Pricing({ currentUser, token, charities, triggerSuccess,
       </div>
       
       {/* Platform Security/Transparency Trust Badges */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
+      <div className="trust-badges-grid">
         <div style={{ display: 'flex', gap: '12px', background: '#fcfcfc', border: '1px solid var(--border-color)', padding: '16px', borderRadius: '6px' }}>
           <ShieldCheck size={36} className="text-green" style={{ flexShrink: 0 }} />
           <div>
