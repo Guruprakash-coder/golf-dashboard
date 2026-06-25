@@ -63,7 +63,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
   const runSimulation = async () => {
     setSimulating(true);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/draws/simulate`, {
+      const res = await fetch(`${API_BASE}/api/draws/simulate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
     if (!simulation) return;
     setPublishing(true);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/draws/publish`, {
+      const res = await fetch(`${API_BASE}/api/draws/publish`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default function Admin({ token, triggerError, triggerSuccess, charities, 
 
   const handleVerifyPayout = async (winnerId, action) => {
     try {
-      const res = await fetch(`${API_BASE}/api/admin/winners/${winnerId}`, {
+      const res = await fetch(`${API_BASE}/api/winners/${winnerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
