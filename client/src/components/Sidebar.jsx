@@ -23,13 +23,12 @@ export default function Sidebar({ activeTab, setActiveTab, currentUser }) {
         </div>
       </div>
 
-      {/* Project selector dropdown (Atlas style) */}
-      <div className="project-selector">
+      {/* Project selector (Atlas style - static info) */}
+      <div className="project-selector" style={{ cursor: 'default' }}>
         <div className="project-selector-meta">
-          <span className="project-label">PROJECT</span>
-          <span className="project-active-name">Trainee Evaluation</span>
+          <span className="project-label">ORGANIZATION</span>
+          <span className="project-active-name">Digital Heroes LLC</span>
         </div>
-        <ChevronsUpDown size={14} className="muted-arrow" />
       </div>
 
       {/* Navigation Sections */}
